@@ -1,0 +1,96 @@
+# === macOS ===
+.DS_Store
+
+# === Xcode ===
+DerivedData/
+build/
+*.xcworkspace
+*.xcodeproj/project.xcworkspace/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcuserstate
+*.xcuserstate
+
+# === SwiftPM ===
+.build/
+.swiftpm/
+
+# === Swift Playgrounds ===
+timeline.xctimeline
+playground.xcworkspace
+
+# === Swift Package Manager (SPM) ===
+Packages/
+Package.pins
+Package.resolved
+
+# === User data ===
+*.perspectivev3
+xcuserdata/
+*.moved-aside
+
+# === Backup files ===
+LotteryAI-backup/
+
+# === API: Python ===
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.env
+.env/
+.venv/
+venv/
+ENV/
+env/
+*.egg-info/
+pip-log.txt
+*.log
+
+# === API: Flask/Python Cache ===
+instance/
+*.sqlite3
+*.db
+
+# === Jupyter ===
+.ipynb_checkpoints
+
+# === Coverage & Test ===
+.coverage
+.tox/
+.nox/
+coverage.xml
+*.cover
+*.py,cover
+htmlcov/
+
+# === Logs & debug ===
+*.log
+logs/
+
+# === IDEs ===
+.idea/
+.vscode/
+*.sw?
+
+# === Node (if ever added frontend) ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# === Data ===
+data/*.csv
+data/*.json
+data/*.pkl
+data/*.zip
+
+# === Output/Exported Files ===
+*.pdf
+*.json
+*.md.bak
+*.tmp
+
+# === Misc ===
+*.bak
+*.tmp
+*.old

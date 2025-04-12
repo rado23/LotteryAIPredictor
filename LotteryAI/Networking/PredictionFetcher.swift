@@ -1,7 +1,76 @@
-//
-//  PredictionFetcher.swift
-//  LotteryAI
-//
-//  Created by Rado Rozkowinski on 09/04/2025.
-//
+import Foundation
 
+enum GameType: String, CaseIterable, Identifiable {
+    case euroMillions = "EuroMillions"
+    case thunderball = "Thunderball"
+    case lotto = "Lotto"
+    case setForLife = "SetForLife"
+
+    var id: String { self.rawValue }
+
+    var endpoint: String {
+        switch self {
+        case .euroMillions: return "euromillions"
+        case .thunderball: return "thunderball"
+        case .lotto: return "lotto"
+        case .setForLife: return "setforlife"
+        }
+    }
+
+    var displayName: String {
+        switch self {
+        case .euroMillions: return "EuroMillions"
+        case .thunderball: return "Thunderball"
+        case .lotto: return "Lotto"
+        case .setForLife: return "Set For Life"
+        }
+    }
+}
+
+struct PredictionContainer: Decodable {
+    var heuristic: [PredictionResponse]?
+    var ml: PredictionResponse?
+}
+
+@MainActor
+class PredictionFetcher: ObservableObject {
+    @Published var predictions: [GameType: [PredictionResponse]] = [:]
+    @Published var isLoading = false
+    @Published var errorMessage: String?
+
+    func fetch(for game: GameType) async {
+        isLoading = true
+        errorMessage = nil
+
+        guard let url = URL(string: "https://lottery-ai-pro.onrender.com/predict/\(game.endpoint)") else {
+            self.errorMessage = "Invalid URL"
+            self.isLoading = false
+            return
+        }
+
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            let decoded = try JSONDecoder().decode(PredictionContainer.self, from: data)
+
+            var combined: [PredictionResponse] = []
+
+            if let heuristic = decoded.heuristic {
+                combined.append(contentsOf: heuristic)
+            }
+
+            if let ml = decoded.ml {
+                combined.append(ml)
+            }
+
+            if combined.isEmpty {
+                self.errorMessage = "No predictions found"
+            }
+
+            self.predictions[game] = combined
+        } catch {
+            self.errorMessage = "Failed to load: \(error.localizedDescription)"
+        }
+
+        isLoading = false
+    }
+}

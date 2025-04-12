@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		5CA995E92DAB18F0003D09EE /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 5CA995E72DAB18E8003D09EE /* .gitignore */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		5C57B4F62DA5CEAB00D37DE5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +31,7 @@
 		5C57B4E52DA5CEAA00D37DE5 /* LotteryAI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LotteryAI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C57B4F52DA5CEAB00D37DE5 /* LotteryAITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LotteryAITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C57B4FF2DA5CEAB00D37DE5 /* LotteryAIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LotteryAIUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5CA995E72DAB18E8003D09EE /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -79,6 +84,7 @@
 				5C57B4F82DA5CEAB00D37DE5 /* LotteryAITests */,
 				5C57B5022DA5CEAB00D37DE5 /* LotteryAIUITests */,
 				5C57B4E62DA5CEAA00D37DE5 /* Products */,
+				5CA995E72DAB18E8003D09EE /* .gitignore */,
 			);
 			sourceTree = "<group>";
 		};
@@ -212,6 +218,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5CA995E92DAB18F0003D09EE /* .gitignore in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

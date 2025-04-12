@@ -1,20 +1,14 @@
 import SwiftUI
 
 struct PredictionView: View {
-<<<<<<< HEAD
-    @State private var predictions: PredictionResponse?
-    @State private var isLoading = true
-    @State private var showAllHeuristics = false
-=======
+
     @State private var showAllHeuristics = false
     @Binding var predictions: PredictionResponse?
->>>>>>> temp-branch
     @ObservedObject var savedManager: SavedPredictionsManager
 
     var body: some View {
         NavigationView {
             VStack {
-<<<<<<< HEAD
                 if isLoading {
                     ProgressView("Loading predictions...")
                 } else if let predictions = predictions {
@@ -127,62 +121,14 @@ struct PredictionView: View {
                     }
                 } else {
                     Text("Failed to load predictions.")
-=======
-                if let predictions = predictions {
-                    List {
-                        heuristicSection(predictions.heuristic)
-                        mlSection(predictions.ml)
-                    }
-                } else {
-                    Text("Predictions failed to load.")
->>>>>>> temp-branch
+
                         .foregroundColor(.red)
                         .padding()
                 }
             }
             .navigationTitle("Lottery AI Predictor")
         }
-<<<<<<< HEAD
-        .onAppear(perform: fetchPredictions)
-    }
 
-    func fetchPredictions() {
-        guard let url = URL(string: "https://lottery-ai-pro.onrender.com/predict") else {
-            print("Invalid URL")
-            return
-        }
-
-        let config = URLSessionConfiguration.default
-        config.timeoutIntervalForRequest = 180
-        config.timeoutIntervalForResource = 180
-        let session = URLSession(configuration: config)
-
-        session.dataTask(with: url) { data, response, error in
-            print("✅ Got a response or error")
-
-            if let error = error {
-                print("❌ Error: \(error.localizedDescription)")
-            }
-
-            DispatchQueue.main.async {
-                self.isLoading = false
-            }
-
-            guard let data = data else {
-                print("No data")
-                return
-            }
-
-            do {
-                let decoded = try JSONDecoder().decode(PredictionResponse.self, from: data)
-                DispatchQueue.main.async {
-                    self.predictions = decoded
-                }
-            } catch {
-                print("Decoding error: \(error.localizedDescription)")
-            }
-        }.resume()
-=======
     }
 
     // MARK: - Heuristic Section
@@ -254,6 +200,6 @@ struct PredictionView: View {
                 }
             )
         }
->>>>>>> temp-branch
+
     }
 }
