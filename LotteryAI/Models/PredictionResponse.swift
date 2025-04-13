@@ -2,7 +2,7 @@ import Foundation
 
 struct PredictionResponse: Codable {
     let heuristic: [NumberSet]
-    let ml: NumberSet
+    let ml: NumberSet?
 }
 
 struct NumberSet: Codable {

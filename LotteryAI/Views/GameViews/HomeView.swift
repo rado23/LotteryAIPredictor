@@ -1,53 +1,66 @@
 import SwiftUI
 
 struct HomeView: View {
+    @StateObject private var fetcher = PredictionFetcher()
     @ObservedObject var savedManager = SavedPredictionsManager()
+    @State private var fetchTimestamps: [GameType: Date] = [:]
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 20) {
-                Text("Ready to be a Millionaire?")
-                    .font(.largeTitle.bold())
-                    .multilineTextAlignment(.center)
-
-                Text("Let AI and other digital friends help you predict the winning numbers.")
-                    .font(.body)
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal)
-
-                Text("Push the button to change your life")
-                    .font(.headline)
-                    .padding(.top)
-
+            List {
                 ForEach(GameType.allCases, id: \.self) { game in
-                    NavigationLink(destination: PredictionView(game: game, savedManager: savedManager)) {
-                        Text("🔮 Predict \(game.displayName) numbers!")
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.blue.gradient)
-                            .foregroundColor(.white)
-                            .cornerRadius(12)
-                    }
-                    .padding(.horizontal)
-                }
-
-                Spacer()
-
-                if let nextDrawDate = getNextDrawDate() {
-                    Text("🗓️ Next draw: \(nextDrawDate)")
-                        .font(.footnote)
-                        .foregroundColor(.gray)
-                        .padding(.bottom, 12)
+                    GameSectionView(
+                        game: game,
+                        isLoading: fetcher.isLoading,
+                        fetchTimestamp: fetchTimestamps[game],
+                        onRefresh: {
+                            Task {
+                                await fetcher.fetch(for: game)
+                                fetchTimestamps[game] = Date()
+                            }
+                        }
+,
+                        savedManager: savedManager,
+                        fetcher: fetcher
+                    )
                 }
             }
-            .padding()
-            .navigationTitle("Lottery AI")
+            .navigationTitle("Lottery Predictor")
         }
     }
 
-    func getNextDrawDate() -> String? {
-        // TODO: Optional logic if you want to show next draw date
-        return nil
+    private func relativeDateString(from date: Date) -> String {
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .short
+        return formatter.localizedString(for: date, relativeTo: Date())
+    }
+}
+
+extension GameType {
+    var nextDrawFormatted: String {
+        let nextDate = nextDrawDate(for: self)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEEE, d MMM"
+        return formatter.string(from: nextDate)
+    }
+
+    private func nextDrawDate(for game: GameType) -> Date {
+        let calendar = Calendar.current
+        let today = Date()
+
+        let targetWeekdays: [Int] = {
+            switch game {
+            case .euroMillions: return [3, 6]         // Tuesday, Friday
+            case .thunderball: return [3, 4, 6, 7]     // Tue, Wed, Fri, Sat
+            case .lotto: return [4, 7]                // Wed, Sat
+            case .setForLife: return [2, 5]           // Mon, Thu
+            }
+        }()
+
+        let nextDates = targetWeekdays.compactMap {
+            calendar.nextDate(after: today, matching: DateComponents(weekday: $0), matchingPolicy: .nextTime)
+        }
+
+        return nextDates.min() ?? today
     }
 }
