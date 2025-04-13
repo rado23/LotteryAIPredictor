@@ -1,13 +1,14 @@
 import Foundation
 
 struct PredictionContainer: Decodable {
-    var heuristic: [PredictionResponse]?
-    var ml: PredictionResponse?
+    let heuristic: [NumberSet]?
+    let ml: NumberSet?
 }
 
 @MainActor
 class PredictionFetcher: ObservableObject {
-    @Published var predictions: [GameType: [PredictionResponse]] = [:]
+    @Published var predictions: [GameType: [NumberSet]] = [:]
+    @Published var mlPredictions: [GameType: NumberSet] = [:]
     @Published var isLoading = false
     @Published var errorMessage: String?
 
@@ -22,26 +23,26 @@ class PredictionFetcher: ObservableObject {
         }
 
         do {
+            print("🌍 Fetching from URL: \(url)")
             let (data, _) = try await URLSession.shared.data(from: url)
+            print("📦 Received data: \(data.count) bytes")
+
             let decoded = try JSONDecoder().decode(PredictionContainer.self, from: data)
 
-            var combined: [PredictionResponse] = []
-
             if let heuristic = decoded.heuristic {
-                combined.append(contentsOf: heuristic)
+                self.predictions[game] = heuristic
             }
 
             if let ml = decoded.ml {
-                combined.append(ml)
+                self.mlPredictions[game] = ml
             }
 
-            if combined.isEmpty {
+            if decoded.heuristic == nil && decoded.ml == nil {
                 self.errorMessage = "No predictions found"
             }
-
-            self.predictions[game] = combined
         } catch {
-            self.errorMessage = "Failed to load: \(error.localizedDescription)"
+            self.errorMessage = "❌ Error fetching predictions: \(error.localizedDescription)"
+            print("❌ Error fetching predictions: \(error.localizedDescription)")
         }
 
         isLoading = false

@@ -1,8 +1,5 @@
 //
 //  LotteryAIApp.swift
-//  LotteryAI
-//
-//  Created by Rado Rozkowinski on 08/04/2025.
 //
 
 import SwiftUI
