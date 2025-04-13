@@ -2,7 +2,7 @@ import SwiftUI
 
 struct PredictionRow: View {
     let set: NumberSet
-    let type: String
+    let type: GameType
     let isSaved: Bool
     let onSave: () -> Void
     let onCopy: () -> Void

@@ -82,3 +82,49 @@ struct SavedView: View {
         Dictionary(grouping: savedManager.saved, by: { $0.game })
     }
 }
+
+struct SavedPredictionRow: View {
+    let prediction: SavedPrediction
+    let onCopy: () -> Void
+    @State private var isCopied = false
+
+    var body: some View {
+        Button(action: {
+            onCopy()
+            withAnimation(.easeIn(duration: 0.2)) {
+                isCopied = true
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                withAnimation {
+                    isCopied = false
+                }
+            }
+        }) {
+            HStack(spacing: 6) {
+                ForEach(prediction.main, id: \.self) { num in
+                    Text("\(num)")
+                        .font(.system(size: 16, weight: .bold, design: .monospaced))
+                        .frame(width: 32, height: 32)
+                        .background(Circle().fill(Color.blue.opacity(0.2)))
+                }
+
+                ForEach(prediction.stars, id: \.self) { star in
+                    LuckyStarBall(number: star)
+                }
+
+                Spacer()
+
+                if isCopied {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundColor(.green)
+                        .transition(.scale)
+                }
+            }
+            .padding(.vertical, 4)
+            .background(isCopied ? Color.green.opacity(0.1) : Color.clear)
+            .cornerRadius(8)
+        }
+        .buttonStyle(.plain)
+    }
+}
+

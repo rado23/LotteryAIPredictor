@@ -18,35 +18,20 @@ class SavedPredictionsManager: ObservableObject {
     }
 
     func removePrediction(_ prediction: SavedPrediction) {
-        saved.removeAll { $0 == prediction }
+        saved.removeAll { $0.id == prediction.id }
         persist()
     }
 
     private func persist() {
-        if let data = try? JSONEncoder().encode(saved) {
-            UserDefaults.standard.set(data, forKey: key)
+        if let encoded = try? JSONEncoder().encode(saved) {
+            UserDefaults.standard.set(encoded, forKey: key)
         }
     }
 
     private func load() {
-        let key = "savedPredictions" // define your key here if not defined elsewhere
         if let data = UserDefaults.standard.data(forKey: key),
            let decoded = try? JSONDecoder().decode([SavedPrediction].self, from: data) {
             saved = decoded
         }
     }
-
-    
-    private func save() {
-        if let encoded = try? JSONEncoder().encode(saved) {
-            UserDefaults.standard.set(encoded, forKey: "savedPredictions")
-        }
-    }
-
-    
-    func remove(_ prediction: SavedPrediction) {
-        saved.removeAll { $0.id == prediction.id }
-        save()
-    }
-
 }

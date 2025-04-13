@@ -1,32 +1,5 @@
 import Foundation
 
-enum GameType: String, CaseIterable, Identifiable {
-    case euroMillions = "EuroMillions"
-    case thunderball = "Thunderball"
-    case lotto = "Lotto"
-    case setForLife = "SetForLife"
-
-    var id: String { self.rawValue }
-
-    var endpoint: String {
-        switch self {
-        case .euroMillions: return "euromillions"
-        case .thunderball: return "thunderball"
-        case .lotto: return "lotto"
-        case .setForLife: return "setforlife"
-        }
-    }
-
-    var displayName: String {
-        switch self {
-        case .euroMillions: return "EuroMillions"
-        case .thunderball: return "Thunderball"
-        case .lotto: return "Lotto"
-        case .setForLife: return "Set For Life"
-        }
-    }
-}
-
 struct PredictionContainer: Decodable {
     var heuristic: [PredictionResponse]?
     var ml: PredictionResponse?
