@@ -34,10 +34,25 @@ struct SavedView: View {
                                         }
                                     )
                                 }
+                                .onDelete { indexSet in
+                                    indexSet.forEach { index in
+                                        if let prediction = groupedPredictions[game]?[index] {
+                                            savedManager.removePrediction(prediction)
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
                     .listStyle(.plain)
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button("Delete All", role: .destructive) {
+                                savedManager.saved.removeAll()
+                            }
+                        }
+                    }
+
                     .navigationTitle("Saved Predictions")
                 }
 
@@ -83,6 +98,7 @@ struct SavedView: View {
     }
 }
 
+
 struct SavedPredictionRow: View {
     let prediction: SavedPrediction
     let onCopy: () -> Void
@@ -109,22 +125,23 @@ struct SavedPredictionRow: View {
                 }
 
                 ForEach(prediction.stars, id: \.self) { star in
-                    LuckyStarBall(number: star)
+                    switch prediction.game {
+                    case .thunderball:
+                        ThunderBall(number: star)
+                    case .setForLife:
+                        SetForLifeBall(number: star)
+                    default:
+                        LuckyStarBall(number: star)
+                    }
                 }
+
 
                 Spacer()
-
-                if isCopied {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(.green)
-                        .transition(.scale)
-                }
             }
             .padding(.vertical, 4)
-            .background(isCopied ? Color.green.opacity(0.1) : Color.clear)
+            .background(isCopied ? Color.green.opacity(0.15) : Color.clear)
             .cornerRadius(8)
         }
         .buttonStyle(.plain)
     }
 }
-

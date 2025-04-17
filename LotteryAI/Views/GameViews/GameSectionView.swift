@@ -4,7 +4,6 @@ struct GameSectionView: View {
     let game: GameType
     let isLoading: Bool
     let fetchTimestamp: Date?
-    let onRefresh: () -> Void
     let savedManager: SavedPredictionsManager
     let fetcher: PredictionFetcher
 
@@ -40,15 +39,6 @@ struct GameSectionView: View {
                     }
                 }
                 .disabled(isLoading)
-
-                if hasPredictions {
-                    Button(action: onRefresh) {
-                        Text("🔄 Refresh")
-                            .font(.caption)
-                            .foregroundColor(.blue)
-                    }
-                    .padding(.top, 4)
-                }
             }
             .padding(.vertical, 8)
         }

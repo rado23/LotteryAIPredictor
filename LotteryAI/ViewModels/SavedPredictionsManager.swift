@@ -34,4 +34,12 @@ class SavedPredictionsManager: ObservableObject {
             saved = decoded
         }
     }
+    
+    func unsavePrediction(game: GameType, main: [Int], stars: [Int]) {
+        saved.removeAll {
+            $0.game == game && $0.main == main && $0.stars == stars
+        }
+        persist()
+    }
+
 }

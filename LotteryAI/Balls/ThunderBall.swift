@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ThunderBallView: View {
+struct ThunderBall: View {
     let number: Int
 
     var body: some View {

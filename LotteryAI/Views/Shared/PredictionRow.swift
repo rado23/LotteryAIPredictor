@@ -6,6 +6,8 @@ struct PredictionRow: View {
     let isSaved: Bool
     let onSave: () -> Void
     let onCopy: () -> Void
+    let onUnsave: () -> Void
+
 
     @State private var isCopied = false
 
@@ -30,18 +32,29 @@ struct PredictionRow: View {
                 }
 
                 ForEach(set.stars, id: \.self) { star in
-                    LuckyStarBall(number: star)
+                    switch set.source {
+                    case .thunderball:
+                        ThunderBall(number: star)
+                    case .setForLife:
+                        SetForLifeBall(number: star)
+                    default:
+                        LuckyStarBall(number: star)
+                    }
                 }
+
 
                 Spacer()
 
                 Text(isSaved ? "✅" : "💾")
                     .font(.system(size: 20))
                     .onTapGesture {
-                        if !isSaved {
+                        if isSaved {
+                            onUnsave()
+                        } else {
                             onSave()
                         }
                     }
+
             }
             .padding(.vertical, 4)
             .background(isCopied ? Color.green.opacity(0.15) : Color.clear)

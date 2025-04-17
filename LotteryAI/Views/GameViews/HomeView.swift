@@ -13,28 +13,16 @@ struct HomeView: View {
                         game: game,
                         isLoading: fetcher.isLoading,
                         fetchTimestamp: fetchTimestamps[game],
-                        onRefresh: {
-                            Task {
-                                await fetcher.fetch(for: game)
-                                fetchTimestamps[game] = Date()
-                            }
-                        }
-,
                         savedManager: savedManager,
                         fetcher: fetcher
                     )
                 }
             }
-            .navigationTitle("Lottery Predictor")
+            .navigationTitle("Lottery AI Assistant")
         }
     }
-
-    private func relativeDateString(from date: Date) -> String {
-        let formatter = RelativeDateTimeFormatter()
-        formatter.unitsStyle = .short
-        return formatter.localizedString(for: date, relativeTo: Date())
-    }
 }
+
 
 extension GameType {
     var nextDrawFormatted: String {
